@@ -59,21 +59,23 @@ namespace SignalR_Demo
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseSignalR(c =>
-            {
-
-                c.MapHub<SensorHub>("/sensor");
-            });
             app.UseAuthorization();
+
+            //app.UseSignalR(c =>
+            //{
+            //    c.MapHub<SensorHub>("/sensor");
+            //});
             
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<SensorHub>("/sensor");
                 endpoints.MapRazorPages();
             });
+
         }
         private IScheduler GetScheduler()
         {

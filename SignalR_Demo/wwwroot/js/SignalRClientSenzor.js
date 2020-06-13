@@ -19,6 +19,31 @@ window.onload = function () {
             dataPoints: dps
         }]
     });
+
+    /*******CPU Graf *******/
+    var dps2 = []; // dataPoints
+    var dataLength2 = 60;
+    var x2 = 1;
+    var chart2 = new CanvasJS.Chart("chartContainerCPU", {
+        title: {
+            text: "Dynamic Data"
+        },
+        axisY: {
+            includeZero: false
+        },
+        data: [{
+            type: "line",
+            dataPoints: dps2
+        }]
+    });
+
+    document.getElementById("conBtn").addEventListener("click", function (event) {
+        connection.invoke("StartCouReading").catch(function (err) {
+            return console.error(err.toString());
+        });
+        event.preventDefault();
+    });
+
     connection.on("SenzorChange", function (data) {
         dps.push({
             label: data.x,
@@ -37,6 +62,7 @@ window.onload = function () {
             x: x++,
             color: "Red",
             labelFontColor: "Red",
+            lineColor:"Red",
             y: parseFloat(data.y)
         });
         if (dps.length > dataLength) {
@@ -45,6 +71,21 @@ window.onload = function () {
         chart.render();
         console.log(data);
         
+    });
+    connection.on("Cpu", function (data) {
+        dps2.push({
+            label: data.x,
+            x: x2++,
+            color: "Red",
+            lineColor: "Red",
+            labelFontColor: "Red",
+            y: parseFloat(data.y)
+        });
+        if (dps2.length > dataLength2) {
+            dps2.shift();
+        }
+        chart2.render();
+
     });
     connection.onreconnected(connectionId => {
         this.Console.log("Reconected");
@@ -63,11 +104,3 @@ window.onload = function () {
 };
 
 
-//document.getElementById("sendButton").addEventListener("click", function (event) {
-//    var user = document.getElementById("userInput").value;
-//    var message = document.getElementById("messageInput").value;
-//    connection.invoke("SendMessage", user, message).catch(function (err) {
-//        return console.error(err.toString());
-//    });
-//    event.preventDefault();
-//});

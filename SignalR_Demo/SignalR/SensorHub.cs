@@ -30,9 +30,25 @@ namespace SignalR_Demo.SignalR
         }
         public async Task Alert(int value,string message)
         {
-            
-            await _contextHub.Clients.All.SendAsync("Alert", new { x = "ALERT\n"+DateTime.Now.ToString("hh:mm:ss"), y = value });
+            await Clients.All.SendAsync("Alert", new { x = "ALERT\n"+DateTime.Now.ToString("hh:mm:ss"), y = value });
         }
+
+        public async Task Cpu(float value, string message)
+        {
+
+            await _contextHub.Clients.All.SendAsync("Cpu", new { x =message, y = value });
+        }
+
+        public async Task JoinRoom(string roomName)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+        }
+
+        public async void StartCouReading()
+        {
+            await Clients.Group("CPU").SendAsync("StartCpu");
+        }
+
         public async void StartSensor()
         {
 
