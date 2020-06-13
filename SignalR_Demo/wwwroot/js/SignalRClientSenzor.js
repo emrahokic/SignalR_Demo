@@ -26,7 +26,7 @@ window.onload = function () {
     var x2 = 1;
     var chart2 = new CanvasJS.Chart("chartContainerCPU", {
         title: {
-            text: "Dynamic Data"
+            text: "CPU"
         },
         axisY: {
             includeZero: false
@@ -44,6 +44,9 @@ window.onload = function () {
         event.preventDefault();
     });
 
+    connection.on("ClientConnected", function () {
+        document.getElementById("conBtn").disabled = false;
+    });
     connection.on("SenzorChange", function (data) {
         dps.push({
             label: data.x,

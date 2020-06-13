@@ -33,6 +33,8 @@ namespace SignalR_Demo.SignalR
             await Clients.All.SendAsync("Alert", new { x = "ALERT\n"+DateTime.Now.ToString("hh:mm:ss"), y = value });
         }
 
+     
+
         public async Task Cpu(float value, string message)
         {
 
@@ -42,12 +44,16 @@ namespace SignalR_Demo.SignalR
         public async Task JoinRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+            await Clients.All.SendAsync("ClientConnected");
+
         }
 
         public async void StartCouReading()
         {
             await Clients.Group("CPU").SendAsync("StartCpu");
         }
+
+
 
         public async void StartSensor()
         {
